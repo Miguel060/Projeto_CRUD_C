@@ -1,0 +1,3 @@
+C:/ws-project/ws-clion/Trabalho_Alg/cmake-build-debug/CMakeFiles/Trabalho_Alg.dir
+C:/ws-project/ws-clion/Trabalho_Alg/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/ws-project/ws-clion/Trabalho_Alg/cmake-build-debug/CMakeFiles/rebuild_cache.dir
