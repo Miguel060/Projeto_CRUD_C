@@ -6,8 +6,10 @@
 
 #define MAX 100
 int i;
+int j;
 int n;
-int totalClientes;
+int totalClientes = 0;
+char toUpperNome[100];
 
 void cadastrar(void);
 void buscarCliente(void);
@@ -51,58 +53,56 @@ void inicioMenu(){
         exibirTodosClientesAtivos();
     }else{
         printf("Opcao invalida\n");
-        pauseScr();
+        system("pause");
         system("cls");
         inicioMenu();
-
     }
 }
 
 
 
 void cadastrar(){
+    system("cls");
+    int proxCliente = totalClientes+1;
     int currentId = 101101;
-    limparTela();
     printf("CADASTRO DE CLIENTE\n");
     printf("--------------------------------------------------------------------------------\n");
-    printf("Quantos clientes serao cadastrados:\n");
-    scanf("%d", &n);
+            for(i=totalClientes;i<proxCliente;i++){
+                currentId++;
+                cadastroCliente[i].id = currentId;
+                printf("Id do cliente:%d\n", cadastroCliente[i].id);
+                printf("Insira o sexo do cliente:(M/F) \n");
+                scanf(" %c", &cadastroCliente[i].sexo);
+                getchar();
 
-    if(n!=0 && n<100){
-        for(i=0;i<n;i++){
-            printf("Id do cliente:%d\n", currentId);
-            printf("Insira o sexo do cliente:(M/F) \n");
-            scanf(" %c",&cadastroCliente[i].sexo);
+                printf("Insira o nome completo do cliente:\n");
+                scanf(" %[^\n]s", &cadastroCliente[i].nomeCompleto);
 
-            printf("Insira o nome completo do cliente:\n");
-            scanf(" %[^\n]s", &cadastroCliente[i].nomeCompleto);
-            printf("Insira o CPF de %s:\n", cadastroCliente[i].nomeCompleto);
-            scanf("%d", &cadastroCliente[i].cpf);
+                printf("Insira o CPF de %s:\n", cadastroCliente[i].nomeCompleto);
+                scanf("%d", &cadastroCliente[i].cpf);
 
-            printf("Insira a data de nascimento de %s\n", cadastroCliente[i].nomeCompleto);
-            scanf("%s", &cadastroCliente[i].dataNasc);
+                printf("Insira a data de nascimento de %s\n", cadastroCliente[i].nomeCompleto);
+                scanf("%s", &cadastroCliente[i].dataNasc);
 
-            printf("Insira o numero de telefone de %s\n", cadastroCliente[i].nomeCompleto);
-            scanf("%d", &cadastroCliente[i].numeroTelefone);
+                printf("Insira o numero de telefone de %s\n", cadastroCliente[i].nomeCompleto);
+                scanf("%d", &cadastroCliente[i].numeroTelefone);
 
-            printf("Insira o email de %s\n", cadastroCliente[i].nomeCompleto);
-            scanf("%s", &cadastroCliente[i].email);
-            printf("--------------------------------------------------------------------------------\n");
-            printf("Cadastro concluído com sucesso!\n");
-            cadastroCliente[i].id = currentId++;
-            totalClientes++;
+                printf("Insira o email de %s\n", cadastroCliente[i].nomeCompleto);
+                scanf("%s", &cadastroCliente[i].email);
 
-        }
-    }else if(n==0){
-        printf("Numero invalido\n");
-    }else if(n>MAX){
-        printf("Limite poss�vel de clientes excedido\n");
-    }
-    pauseScr();
-    limparTela();
-    inicioMenu();
+                printf("--------------------------------------------------------------------------------\n");
+                printf("Cadastro concluido com sucesso!\n");
+                totalClientes++;
+                pauseScr();
+                limparTela();
+                inicioMenu();
+            }
 }
 void buscarCliente(){
+    if(totalClientes == 0){
+        printf("Nao ha clientes cadastrados!\n");
+        inicioMenu();
+    }
     int busca;
     int buscaID;
     char buscaNome[50];
@@ -110,18 +110,18 @@ void buscarCliente(){
     printf("1- Busca por ID\n");
     printf("2- Busca por Nome\n");
     scanf("%d", &busca);
-    getchar();
     int tryCatch = 0;
     if(busca == 1){
         printf("Insira o ID do cliente: \n");
         scanf("%d", &buscaID);
-
+        getchar();
         for(i=0;i<totalClientes;i++){
             if(buscaID == cadastroCliente[i].id){
                 tryCatch++;
+                printf("--------------------------------------------------------------------------------\n");
                 printf("Sexo:%c\n", cadastroCliente[i].sexo);
                 printf("Nome completo:%s\n", &cadastroCliente[i].nomeCompleto);
-                printf("CPF%d:\n", cadastroCliente[i].cpf);
+                printf("CPF:%d\n", cadastroCliente[i].cpf);
                 printf("Data de nascimento: %s\n", cadastroCliente[i].dataNasc);
                 printf("Telefone:%d\n", cadastroCliente[i].numeroTelefone);
                 printf("Email:%s\n", cadastroCliente[i].email);
@@ -130,7 +130,7 @@ void buscarCliente(){
 
     }if(busca == 2){
         printf("Insira o nome completo do cliente:\n");
-        scanf(" %[^\n]s", &buscaNome[50]);
+        scanf(" %[^\n]s", &buscaNome);
         for(i=0;i<totalClientes;i++){
             if(strcmp(buscaNome, cadastroCliente[i].nomeCompleto)==0){
                 tryCatch++;
@@ -167,10 +167,11 @@ void exibirTodosClientesAtivos(){
     for(i=0;i<totalClientes;i++){
         printf("Sexo:%c\n", cadastroCliente[i].sexo);
         printf("Nome completo:%s\n", &cadastroCliente[i].nomeCompleto);
-        printf("CPF%d:\n", cadastroCliente[i].cpf);
+        printf("CPF:%d\n", cadastroCliente[i].cpf);
         printf("Data de nascimento: %s\n", cadastroCliente[i].dataNasc);
-        printf("Telefone:%d", cadastroCliente[i].numeroTelefone);
+        printf("Telefone:%d\n", cadastroCliente[i].numeroTelefone);
     }
+    inicioMenu();
 }
 
 void editarClientes(){
@@ -185,7 +186,14 @@ void editarClientes(){
         scanf("%d", &s_id);
         for(i=0;i<totalClientes;i++){
             if(s_id == cadastroCliente[i].id) {
-                printf("Escolha o dado que deseja alterar\n1- Nome\n2- Sexo\n3- Telefone\n4- Cpf\n5- Email\n 6-DataNasc");
+                printf("--------------------------------------------------------------------------------\n");
+                printf("Sexo:%c\n", cadastroCliente[i].sexo);
+                printf("Nome completo:%s\n", &cadastroCliente[i].nomeCompleto);
+                printf("CPF:%d\n", cadastroCliente[i].cpf);
+                printf("Data de nascimento: %s\n", cadastroCliente[i].dataNasc);
+                printf("Telefone:%d\n", cadastroCliente[i].numeroTelefone);
+                printf("Email:%s\n", cadastroCliente[i].email);
+                printf("Escolha o dado que deseja alterar\n1- Nome\n2- Sexo\n3- Telefone\n4- Cpf\n5- Email\n 6-DataNasc\n");
                 scanf("%d", &op_edit);
                 if(op_edit == 1){
                     printf("Insira o nome do cliente\n");
@@ -214,6 +222,13 @@ void editarClientes(){
         scanf(" %[^\n]s", &buscaNome);
         for (i = 0; i < totalClientes; ++i) {
             if(strcmp(buscaNome, cadastroCliente[i].nomeCompleto)==0){
+                printf("--------------------------------------------------------------------------------\n");
+                printf("Sexo:%c\n", cadastroCliente[i].sexo);
+                printf("Nome completo:%s\n", &cadastroCliente[i].nomeCompleto);
+                printf("CPF:%d\n", cadastroCliente[i].cpf);
+                printf("Data de nascimento: %s\n", cadastroCliente[i].dataNasc);
+                printf("Telefone:%d\n", cadastroCliente[i].numeroTelefone);
+                printf("Email:%s\n", cadastroCliente[i].email);
                 printf("Escolha o dado que deseja alterar\n1- Nome\n2- Sexo\n3- Telefone\n4- Cpf\n5- Email\n 6-DataNasc\n");
                 scanf("%d", &op_edit);
                 if(op_edit == 1){
@@ -238,9 +253,9 @@ void editarClientes(){
             }
         }
     }
-
         else{
             printf("Opcao invalida!\n");
+            pauseScr();
             limparTela();
             inicioMenu();
         }
